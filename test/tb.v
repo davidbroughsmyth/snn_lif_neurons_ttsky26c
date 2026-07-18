@@ -28,7 +28,7 @@ module tb ();
 `endif
 
   // Replace tt_um_example with your module name:
-  tt_snn_lif_neuron user_project (
+  tt_um_snn_lif_neuron user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
