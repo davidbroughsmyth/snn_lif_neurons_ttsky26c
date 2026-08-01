@@ -36,7 +36,7 @@ module SNN_Heart_Monitor_Top #(
     wire spike_flip;
     wire window_start, window_end;
     wire [NUM_NEURONS-1:0] parallel_spikes;
-    wire [(NUM_NEURONS*BIT_WIDTH)-1:0] matrix_v_mem;
+    // wire [(NUM_NEURONS*BIT_WIDTH)-1:0] matrix_v_mem;
 
     reg neuron_tick;
     always @(posedge clk) begin
