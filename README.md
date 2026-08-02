@@ -25,9 +25,13 @@ Classifies synthetic ECG-like morphology after an R-peak using five banded LIF n
 
 ```sh
 cd test
+python3.13 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 make -B
 ```
+
+Includes synthetic class/alarm checks plus a MIT-BIH CSV stream smoke test
+(`test/data/mitbih_100_excerpt.csv`).
 
 ## What is Tiny Tapeout?
 

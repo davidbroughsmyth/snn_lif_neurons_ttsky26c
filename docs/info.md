@@ -35,6 +35,11 @@ The cocotb suite checks:
 - steep rise → class 2
 - zigzag → class 4
 - alarm quiet for 2 ventricular beats, fires on the 3rd, clears on Normal
+- **MIT-BIH stream** — plays `test/data/mitbih_100_excerpt.csv` into the ADC pins,
+  requires several `diag_valid` detections, and logs a class histogram plus optional
+  annotation agreement (informational; not a hard accuracy gate)
+
+See [`test/data/README.md`](../test/data/README.md) for PhysioNet citation and scaling.
 
 On hardware / FPGA:
 
