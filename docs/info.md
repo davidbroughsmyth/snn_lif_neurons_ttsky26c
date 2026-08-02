@@ -51,4 +51,5 @@ On hardware / FPGA:
 ## External hardware
 
 - Optional: external ADC or microcontroller streaming 12-bit samples into the pin-mapped ADC bus, with a sample strobe on `uio[4]`.
+- Optional: companion Tiny Tapeout SAR ADC [heart_monitor_adc_ttsky26c](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c) (12-bit ~500 SPS); wire per its `docs/INTEGRATION.md`.
 - Optional: LED on `uo[4]` for the anomaly alarm.
