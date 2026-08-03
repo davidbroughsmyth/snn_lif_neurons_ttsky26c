@@ -1,7 +1,7 @@
 # User Manual — snn_lif_neurons on Tiny Tapeout demoboard
 
-How to **use and test** `tt_um_snn_lif_neuron` alone, and how to exercise it
-**together with** the companion ADC `tt_um_davidbroughsmyth_ecg_sar12` using the
+How to **use and test** `tt_um_snn_lif_neuron` alone, **with an external ADC chip**,
+and **together with** the companion ADC `tt_um_davidbroughsmyth_ecg_sar12` using the
 RP2350 on the Tiny Tapeout demo PCB.
 
 | Doc | Link |
@@ -39,12 +39,14 @@ The shuttle **enables one design at a time**. The RP2350 only sees that design�
 
 | Scenario | Enabled project | What the RP2350 does |
 |---|---|---|
-| SNN alone / combined HIL | `tt_um_snn_lif_neuron` | Drive ADC-like samples + `sample_en`; read class / `diag_valid` / alarm |
-| ADC alone | `tt_um_davidbroughsmyth_ecg_sar12` | Drive digital vin; read ADC bus (see ADC manual) |
+| SNN alone / HIL | `tt_um_snn_lif_neuron` | Synthesize ADC-like samples + `sample_en`; read class / alarm |
+| External ADC + SNN | `tt_um_snn_lif_neuron` | Read external ADC (e.g. SPI); drive SNN bus + `sample_en`; read class / alarm |
+| Companion TT ADC alone | `tt_um_davidbroughsmyth_ecg_sar12` | Drive digital vin; read ADC bus (see ADC manual) |
 | Two-tile silicon | both on chip, external wiring | INTEGRATION wiring; mux still shows one project’s pins to RP |
 
-On the demoboard, **“combined with ADC” HIL** means: enable the **SNN** and have the
-RP2350 **emulate** the ADC traffic the SAR tile would produce.
+On the demoboard, **“combined with TT ADC” HIL** means: enable the **SNN** and have the
+RP2350 **emulate** the ADC traffic. **External commercial ADCs** use the same SNN pin map;
+the RP bridges SPI (or parallel) samples onto `ui`/`uio`.
 
 ---
 
@@ -110,6 +112,33 @@ Enable the ADC project and run companion HIL from
 [heart_monitor_adc demoboard](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/tree/main/demoboard)
 before relying on real silicon ADC→SNN wiring.
 
+### 2.5 External ADC chip → SNN (lab bridge)
+
+```mermaid
+flowchart LR
+  ecg[ECG_front_end] --> extAdc[External_ADC_ADS7886_or_MCP3201]
+  extAdc -->|SPI| rp[RP2350]
+  rp -->|ui_adc_lo| snn[snn_lif_neuron]
+  rp -->|uio_adc_hi_sample_en| snn
+  rp -->|clk_rst_n| snn
+  snn -->|class_diag_alarm| rp
+```
+
+Typical parts: **ADS7886**, **MCP3201**, or any 12-bit SAR whose host can present a
+parallel sample + data-ready strobe. SPI ADCs hang off **free RP GPIOs** (not the
+Tiny Tapeout project pin buses). The RP packs each conversion onto the SNN consumer
+bus and pulses `sample_en`.
+
+Optional variant — MCU already owns the ADC and emits parallel data:
+
+```mermaid
+flowchart LR
+  ecg[ECG] --> extAdc[External_ADC]
+  extAdc --> mcu[MCU]
+  mcu -->|adc12_DRDY| rp[RP2350_or_direct]
+  rp -->|ui_uio_sample_en| snn[snn_lif_neuron]
+```
+
 ---
 
 ## 3. Using the SNN alone
@@ -171,15 +200,71 @@ Includes synthetic class/alarm tests and MIT-BIH CSV stream smoke
 
 ---
 
-## 4. Combined with heart_monitor_adc
+## 4. Setup and test with an external ADC chip
 
-### 4.1 Demoboard HIL (recommended before silicon)
+Use this when you have a **commercial ADC** (or MCU+ADC) and want to feed the SNN
+before the on-shuttle SAR is available, or to compare against it.
+
+### 4.1 Setup checklist
+
+1. Common **GND** between ECG front-end, ADC, demoboard.
+2. Power the ADC at its rated VDD; **level-shift** to 3.3 V logic if the ADC is 5 V
+   before connecting to RP GPIOs.
+3. Wire SPI (or parallel) from the ADC to **spare RP2350 GPIOs** — do not steal
+   `ui`/`uo`/`uio` used for the Tiny Tapeout project bus.
+4. Enable `tt_um_snn_lif_neuron`; `tt.mode = RPMode.ASIC_RP_CONTROL`;
+   `tt.uio_oe_pico.value = 0xFF`.
+5. Clock the project (`clock_project_PWM`, e.g. 1 MHz) and release reset.
+6. Aim for ~**500 SPS** into the SNN (matches `SAMPLE_RATE_HZ`). Faster is OK for
+   lab smoke tests; keep `sample_en` as a short pulse per sample.
+7. Scale / offset so baseline is mid-low and **R-peaks ≥ 2200** (12-bit codes).
+
+### 4.2 Bus packing (same as companion ADC → SNN)
+
+| External meaning | SNN pin |
+|---|---|
+| adc[7:0] | `ui_in[7:0]` |
+| adc[11:8] | `uio_in[3:0]` |
+| conversion ready / DRDY | `uio_in[4]` (`sample_en`), pulse high then low |
+
+```text
+tt.ui_in.value  = code & 0xFF
+tt.uio_in.value = ((code >> 8) & 0xF) | (sample_en << 4)
+```
+
+### 4.3 Test procedure
+
+1. Stream resting baseline (~150) with regular `sample_en` pulses — no `diag_valid`.
+2. Inject an R-peak (≥ 2200), then ~100 samples of morphology:
+   - gentle rise → expect class **0**
+   - steep rise → expect class **2**
+3. Confirm `uo[3]` (`diag_valid`) then read `uo[2:0]`.
+4. Optional alarm: three consecutive anomaly classes (1/2/4) → `uo[4]` high; Normal clears.
+5. Cross-check against synthetic HIL: `demoboard/tt_um_snn_lif_neuron` (no external chip).
+
+Template bridge script: [`demoboard/external_adc_bridge_example.py`](../demoboard/external_adc_bridge_example.py)
+(fill in SPI pins / read routine for your ADC).
+
+### 4.4 Troubleshooting (external ADC)
+
+| Symptom | Check |
+|---|---|
+| No `diag_valid` | Peak below 2200; `sample_en` never pulsed; project not clocked |
+| Nonsense classes | Bit order / endian on SPI; wrong 12-bit alignment into `ui`/`uio` |
+| SPS mismatch | Segmenter assumes 500 Hz for window ms; adjust rate or accept timing skew |
+| SPI noise | Short wires, common GND, series resistors, confirm 3.3 V levels |
+
+---
+
+## 5. Combined with heart_monitor_adc
+
+### 5.1 Demoboard HIL (recommended before silicon)
 
 1. Enable `tt_um_snn_lif_neuron`.
 2. Run `demoboard/tt_um_snn_lif_neuron` — RP plays ADC.
 3. Expect gentle-rise → class 0; three steep-rise → alarm.
 
-### 4.2 Two-tile silicon
+### 5.2 Two-tile silicon
 
 1. Wire ADC digital bus → SNN per INTEGRATION table; share `clk` / `rst_n` / GND.
 2. ECG / function-gen → ADC `ua[0]`; `ua[1]` = vref.
@@ -188,13 +273,14 @@ Includes synthetic class/alarm tests and MIT-BIH CSV stream smoke
 
 ---
 
-## 5. Installing MicroPython tests
+## 6. Installing MicroPython tests
 
 ```sh
 pip install --user mpremote
 mpremote connect list
 mpremote fs mkdir :/examples
 mpremote fs cp -r demoboard/tt_um_snn_lif_neuron :/examples/
+mpremote fs cp demoboard/external_adc_bridge_example.py :/examples/
 mpremote reset
 ```
 
@@ -211,7 +297,7 @@ Style matches
 
 ---
 
-## 6. Troubleshooting
+## 7. Troubleshooting
 
 | Symptom | Check |
 |---|---|
@@ -223,7 +309,7 @@ Style matches
 
 ---
 
-## 7. Quick reference
+## 8. Quick reference
 
 ```text
 SNN: all consumer uio are inputs
@@ -235,4 +321,6 @@ sample_en -> uio_in[4]
 
 uo[2:0] class | uo[3] diag_valid | uo[4] alarm
 R_PEAK_THRESHOLD = 2200
+
+External ADC: SPI on free RP GPIOs → pack bus as above
 ```
