@@ -1,7 +1,8 @@
 # Tiny Tapeout SNN Heart Monitor
 
 Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) ·
-Component datasheet: [DATASHEET.md](DATASHEET.md)
+Component datasheet: [DATASHEET.md](DATASHEET.md) ·
+Demoboard / HIL manual: [ADC USER_MANUAL](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/USER_MANUAL.md)
 
 ## How it works
 
