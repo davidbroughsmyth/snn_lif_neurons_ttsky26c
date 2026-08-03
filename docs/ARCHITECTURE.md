@@ -3,7 +3,7 @@
 Digital **spiking neural network (SNN) heart-beat classifier** for Tiny Tapeout
 (`tt_um_snn_lif_neuron`).
 
-TT datasheet: [info.md](info.md) · Component sheet: [DATASHEET.md](DATASHEET.md)
+TT datasheet: [info.md](info.md) · Component sheet: [DATASHEET.md](DATASHEET.md) · User manual: [USER_MANUAL.md](USER_MANUAL.md)
 
 Companion ADC: [heart_monitor_adc_ttsky26c](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c)
 

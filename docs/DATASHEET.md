@@ -216,4 +216,4 @@ Baseline ADC ~150; R-peak ≥ 2200; slope morphology for ~100 samples after peak
 
 *Preliminary datasheet — functional design targets. See CI GDS reports for silicon area/power.*
 
-TT project sheet: [info.md](info.md)
+TT project sheet: [info.md](info.md) · User manual: [USER_MANUAL.md](USER_MANUAL.md)
