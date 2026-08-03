@@ -267,9 +267,9 @@ Template bridge script: [`demoboard/external_adc_bridge_example.py`](../demoboar
 ### 5.2 Two-tile silicon
 
 1. Wire ADC digital bus → SNN per INTEGRATION table; share `clk` / `rst_n` / GND.
-2. ECG / function-gen → ADC `ua[0]`; `ua[1]` = vref.
-3. To observe SNN outputs on the RP, **enable the SNN** in the mux (ADC still runs if clocked on-chip / shared clock — pin visibility is SNN’s).
-4. To debug the ADC alone, enable the ADC project and use the ADC user manual.
+2. ECG / AWG → companion ADC `ua[0]`; `ua[1]` = vref (see ADC [USER_MANUAL §3.4](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/USER_MANUAL.md#34-bench-instruments-analog-discovery)).
+3. Probe SNN `uo[2:0]` / `uo[3]` / `uo[4]` with a scope or AD3 digital channels.
+4. Mux still exposes one project to the RP at a time — enable the SNN to observe class/alarm on the RP; enable the ADC project to debug the SAR alone.
 
 ---
 
