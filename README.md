@@ -5,6 +5,8 @@
 Spiking neural network heart-beat classifier for Tiny Tapeout (ttsky26c).
 
 - [Project documentation](docs/info.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Component datasheet](docs/DATASHEET.md) (databook style)
 
 ## What it does
 

@@ -1,5 +1,8 @@
 # Tiny Tapeout SNN Heart Monitor
 
+Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) ·
+Component datasheet: [DATASHEET.md](DATASHEET.md)
+
 ## How it works
 
 This design is a compact spiking neural network (SNN) heart-beat classifier for Tiny Tapeout.
