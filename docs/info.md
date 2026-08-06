@@ -3,7 +3,8 @@
 Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) ·
 Component datasheet: [DATASHEET.md](DATASHEET.md) ·
 User manual (demoboard / HIL): [USER_MANUAL.md](USER_MANUAL.md) ·
-Companion ADC manual: [ADC USER_MANUAL](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/USER_MANUAL.md)
+Companion ADC manual: [ADC USER_MANUAL](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c/blob/main/docs/USER_MANUAL.md)
+([`heart_monitor_adc_art_ttsky26c`](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c) — fabrication companion)
 
 ## How it works
 
@@ -56,5 +57,5 @@ On hardware / FPGA:
 ## External hardware
 
 - Optional: external ADC or microcontroller streaming 12-bit samples into the pin-mapped ADC bus, with a sample strobe on `uio[4]`. Setup and test: [USER_MANUAL.md §4](USER_MANUAL.md#4-setup-and-test-with-an-external-adc-chip).
-- Optional: companion Tiny Tapeout SAR ADC [heart_monitor_adc_ttsky26c](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c) (12-bit ~500 SPS); wire per its `docs/INTEGRATION.md`.
+- Optional: companion Tiny Tapeout SAR ADC [`heart_monitor_adc_art_ttsky26c`](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c) (12-bit ~500 SPS + decorative met4 art; electrically same as the pristine ADC); wire per its `docs/INTEGRATION.md`.
 - Optional: LED on `uo[4]` for the anomaly alarm.

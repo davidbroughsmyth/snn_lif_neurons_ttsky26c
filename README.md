@@ -8,7 +8,7 @@ Spiking neural network heart-beat classifier for Tiny Tapeout (ttsky26c).
 - [Architecture](docs/ARCHITECTURE.md)
 - [Component datasheet](docs/DATASHEET.md) (databook style)
 - [User manual](docs/USER_MANUAL.md) (demoboard + HIL)
-- [Companion ADC manual](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/USER_MANUAL.md)
+- [Companion ADC manual](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c/blob/main/docs/USER_MANUAL.md) (**fabrication** companion: [`heart_monitor_adc_art_ttsky26c`](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c); decorative met4 art, electrically identical to the art-free [pristine ADC](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c))
 
 ## What it does
 

@@ -1,16 +1,17 @@
 # User Manual — snn_lif_neurons on Tiny Tapeout demoboard
 
 How to **use and test** `tt_um_snn_lif_neuron` alone, **with an external ADC chip**,
-and **together with** the companion ADC `tt_um_davidbroughsmyth_ecg_sar12` using the
-RP2350 on the Tiny Tapeout demo PCB.
+and **together with** the fabrication companion ADC `tt_um_davidbroughsmyth_ecg_sar12`
+([`heart_monitor_adc_art_ttsky26c`](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c))
+using the RP2350 on the Tiny Tapeout demo PCB.
 
 | Doc | Link |
 |---|---|
 | Architecture | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Component datasheet | [DATASHEET.md](DATASHEET.md) |
 | MicroPython HIL scripts | [`../demoboard/`](../demoboard/) |
-| Companion ADC manual | [ADC USER_MANUAL](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/USER_MANUAL.md) |
-| Two-tile wiring | [ADC INTEGRATION](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/INTEGRATION.md) |
+| Companion ADC manual | [ADC USER_MANUAL](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c/blob/main/docs/USER_MANUAL.md) |
+| Two-tile wiring | [ADC INTEGRATION](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c/blob/main/docs/INTEGRATION.md) |
 
 Firmware / board references:
 
@@ -109,7 +110,7 @@ flowchart LR
 ```
 
 Enable the ADC project and run companion HIL from
-[heart_monitor_adc demoboard](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/tree/main/demoboard)
+[heart_monitor_adc demoboard](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c/tree/main/demoboard)
 before relying on real silicon ADC→SNN wiring.
 
 ### 2.5 External ADC chip → SNN (lab bridge)
@@ -267,7 +268,7 @@ Template bridge script: [`demoboard/external_adc_bridge_example.py`](../demoboar
 ### 5.2 Two-tile silicon
 
 1. Wire ADC digital bus → SNN per INTEGRATION table; share `clk` / `rst_n` / GND.
-2. ECG / AWG → companion ADC `ua[0]`; `ua[1]` = vref (see ADC [USER_MANUAL §3.4](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/USER_MANUAL.md#34-bench-instruments-analog-discovery)).
+2. ECG / AWG → companion ADC `ua[0]`; `ua[1]` = vref (see ADC [USER_MANUAL §3.4](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c/blob/main/docs/USER_MANUAL.md#34-bench-instruments-analog-discovery)).
 3. Probe SNN `uo[2:0]` / `uo[3]` / `uo[4]` with a scope or AD3 digital channels.
 4. Mux still exposes one project to the RP at a time — enable the SNN to observe class/alarm on the RP; enable the ADC project to debug the SAR alone.
 

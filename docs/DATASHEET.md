@@ -41,7 +41,7 @@ after three consecutive anomaly classifications.
 ## Applications
 
 - On-chip ECG morphology triage with Tiny Tapeout SNN
-- Two-tile demo with [heart_monitor_adc_ttsky26c](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c)
+- Two-tile demo with [`heart_monitor_adc_art_ttsky26c`](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c) (fabrication companion)
 - Lab bring-up with MCU-driven ADC + `sample_en`
 
 ---
@@ -210,7 +210,7 @@ Baseline ADC ~150; R-peak ≥ 2200; slope morphology for ~100 samples after peak
 | Part / top module | `tt_um_snn_lif_neuron` |
 | Repository | https://github.com/davidbroughsmyth/snn_lif_neurons_ttsky26c |
 | Shuttle family | TTSKY (sky130A) |
-| Companion ADC | `tt_um_davidbroughsmyth_ecg_sar12` |
+| Companion ADC | `tt_um_davidbroughsmyth_ecg_sar12` ([heart_monitor_adc_art_ttsky26c](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c)) |
 
 ---
 

@@ -5,7 +5,9 @@ Digital **spiking neural network (SNN) heart-beat classifier** for Tiny Tapeout
 
 TT datasheet: [info.md](info.md) · Component sheet: [DATASHEET.md](DATASHEET.md) · User manual: [USER_MANUAL.md](USER_MANUAL.md)
 
-Companion ADC: [heart_monitor_adc_ttsky26c](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c)
+Companion ADC (fabrication): [`heart_monitor_adc_art_ttsky26c`](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c)
+(decorative silicon art; electrically identical to the art-free [pristine ADC](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c)).
+Shuttle pair: this SNN + the art fork.
 
 ## System context
 
@@ -110,5 +112,5 @@ Gentle vs steep separation avoids conflating Normal and Ventricular on similar e
 ## Two-tile demo
 
 Wire companion ADC digital bus → this tile’s `ui`/`uio` as in the ADC
-[INTEGRATION.md](https://github.com/davidbroughsmyth/heart_monitor_adc_ttsky26c/blob/main/docs/INTEGRATION.md).
+[INTEGRATION.md](https://github.com/davidbroughsmyth/heart_monitor_adc_art_ttsky26c/blob/main/docs/INTEGRATION.md).
 Share `clk`, `rst_n`, GND.
